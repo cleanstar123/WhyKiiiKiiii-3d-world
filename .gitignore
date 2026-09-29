@@ -1,0 +1,6 @@
+node_modules/
+.idea/
+.DS_Store
+
+# 대용량 에셋 (Git LFS 또는 별도 호스팅 필요)
+public/assets/video/

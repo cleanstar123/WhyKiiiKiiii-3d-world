@@ -1,0 +1,19 @@
+{
+  "name": "whykiiikiii-3d-world",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "WhyKiiiKiii 앨범 컨셉에서 영감을 받은 비공식 팬메이드 three.js 3D 월드 (비영리)",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "three": "0.170.0"
+  },
+  "devDependencies": {
+    "@types/three": "0.170.0",
+    "vite": "^5.4.0"
+  }
+}

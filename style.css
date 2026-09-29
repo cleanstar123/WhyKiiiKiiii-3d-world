@@ -1,0 +1,372 @@
+:root {
+  --bubblegum: #ff8fc7;
+  --lilac: #b9a6ff;
+  --pool: #7fe3f0;
+  --lemon: #fff27a;
+  --ink: #2a1f4a;
+  --rec: #ff3b3b;
+  --paper: #fffaf3;
+  --pixel: 'Silkscreen', 'Courier New', monospace;
+  --round: 'Do Hyeon', system-ui, sans-serif;
+}
+
+[hidden] { display: none !important; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #d9c4ff;
+  color: var(--ink);
+  font-family: var(--round);
+  -webkit-font-smoothing: antialiased;
+}
+
+#world {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+}
+
+/* ---------- 허브 UI ---------- */
+.brand {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 18px);
+  left: 20px;
+  pointer-events: none;
+}
+.brand-name {
+  margin: 0;
+  font-family: var(--pixel);
+  font-size: clamp(26px, 3.2vw, 38px);
+  line-height: 1.1;
+  color: var(--paper);
+  text-shadow: 2px 2px 0 var(--ink), -1px -1px 0 var(--ink), 1px -1px 0 var(--ink), -1px 1px 0 var(--ink);
+}
+.brand-sub { margin: 6px 0 0; font-size: 20px; }
+
+.credit {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 22px);
+  right: 20px;
+  margin: 0;
+  font-size: 13px;
+  opacity: .75;
+  pointer-events: none;
+}
+
+.timeline {
+  position: fixed;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 46px);
+  transform: translateX(-50%);
+  max-width: calc(100vw - 24px);
+}
+.timeline ol {
+  display: flex;
+  gap: 4px;
+  margin: 0;
+  padding: 5px;
+  list-style: none;
+  background: rgba(255, 250, 243, .6);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+}
+.timeline button {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 7px 14px;
+  font: inherit;
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.timeline .t { font-family: var(--pixel); font-size: 12px; }
+.timeline .n { font-size: 16px; white-space: nowrap; }
+.timeline button:hover,
+.timeline button.is-hot { background: var(--ink); color: var(--lemon); }
+.timeline button:focus-visible { outline: 3px solid var(--rec); outline-offset: 2px; }
+
+.hint {
+  position: fixed;
+  left: 0; right: 0;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
+  margin: 0;
+  text-align: center;
+  font-size: 16px;
+  pointer-events: none;
+}
+
+@media (max-width: 760px) {
+  .timeline { bottom: calc(env(safe-area-inset-bottom, 0px) + 62px); }
+  .timeline .n { display: none; }
+  .hint { padding: 0 20px; font-size: 15px; line-height: 1.35; }
+  .credit { top: auto; bottom: calc(env(safe-area-inset-bottom, 0px) + 116px); right: 0; left: 0; text-align: center; }
+}
+
+/* 장면 안에서는 허브 UI를 숨긴다 */
+body:not([data-mode="hub"]) .timeline,
+body:not([data-mode="hub"]) .hint,
+body:not([data-mode="hub"]) .brand,
+body:not([data-mode="hub"]) .credit { opacity: 0; pointer-events: none; }
+.timeline, .hint, .brand, .credit { transition: opacity .3s; }
+body:not([data-mode="hub"]) .timeline button { visibility: hidden; }
+
+/* ---------- 장면 OSD (캠코더 화면 안 느낌) ---------- */
+.osd {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  font-family: var(--pixel);
+  color: #fff;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, .55);
+}
+.osd p { margin: 0; position: absolute; }
+.osd-corner {
+  position: absolute;
+  width: 34px; height: 26px;
+  border: 0 solid rgba(255, 255, 255, .9);
+}
+.osd-corner.tl { top: 22px; left: 22px; border-top-width: 3px; border-left-width: 3px; }
+.osd-corner.tr { top: 22px; right: 22px; border-top-width: 3px; border-right-width: 3px; }
+.osd-corner.bl { bottom: 22px; left: 22px; border-bottom-width: 3px; border-left-width: 3px; }
+.osd-corner.br { bottom: 22px; right: 22px; border-bottom-width: 3px; border-right-width: 3px; }
+.osd-play { top: 40px; left: 44px; font-size: 18px; }
+.osd-battery {
+  top: 40px; right: 44px;
+  display: flex; gap: 2px;
+  padding: 3px; border: 2px solid #fff; border-radius: 2px;
+}
+.osd-battery i { width: 7px; height: 12px; background: #fff; }
+.osd-title { bottom: 44px; left: 44px; font-family: var(--round); font-size: clamp(18px, 2.4vw, 26px); }
+.osd-time { bottom: 44px; right: 44px; font-size: 16px; text-align: right; line-height: 1.5; }
+.osd-back {
+  position: absolute;
+  top: 34px; left: 50%;
+  transform: translateX(-50%);
+  pointer-events: auto;
+  padding: 8px 16px;
+  font: 16px var(--round);
+  color: #fff;
+  background: rgba(42, 31, 74, .35);
+  border: 2px solid #fff;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.osd-back:hover { background: #fff; color: var(--ink); text-shadow: none; }
+.osd-back:focus-visible { outline: 3px solid var(--lemon); outline-offset: 3px; }
+
+.notice {
+  position: fixed;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  max-width: min(440px, 86vw);
+  padding: 18px 20px;
+  font-size: 17px;
+  line-height: 1.5;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  box-shadow: 5px 5px 0 var(--ink);
+}
+
+/* ---------- 캠코더 위 시간 태그 ---------- */
+.time-tag {
+  position: fixed;
+  transform: translate(-50%, calc(-100% - 10px));
+  pointer-events: none;
+  font-family: var(--pixel);
+  color: #fff;
+  background: rgba(42, 31, 74, .7);
+  border: 1.5px solid rgba(255, 255, 255, .35);
+  border-radius: 7px;
+  padding: 5px 10px;
+  text-align: center;
+  white-space: nowrap;
+  line-height: 1.45;
+  opacity: 0;
+  transition: opacity .25s, border-color .2s, background .2s;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.time-tag-t {
+  display: block;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+}
+.time-tag-n {
+  display: block;
+  font-family: var(--round);
+  font-size: 11px;
+  opacity: .6;
+  max-width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: opacity .2s;
+}
+.time-tag.is-hovered {
+  background: rgba(42, 31, 74, .88);
+  border-color: rgba(255, 255, 255, .75);
+}
+.time-tag.is-hovered .time-tag-n {
+  opacity: 1;
+}
+
+/* ---------- 캠코더 아래 재생 버튼 ---------- */
+.cam-btn {
+  position: fixed;
+  transform: translate(-50%, 10px);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, .65);
+  background: rgba(42, 31, 74, .65);
+  color: #fff;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s, background .2s, border-color .2s, box-shadow .2s;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cam-btn:hover {
+  background: rgba(42, 31, 74, .92);
+  border-color: #fff;
+}
+.cam-btn:focus-visible { outline: 3px solid var(--lemon); outline-offset: 3px; }
+.cam-btn.is-playing {
+  background: var(--rec);
+  border-color: var(--rec);
+  box-shadow: 0 0 14px rgba(255, 59, 59, .55);
+}
+.cam-btn .btn-icon { pointer-events: none; }
+
+/* =============================================
+   인트로
+   ============================================= */
+
+/* 인트로 중에는 허브 UI 숨김 */
+body[data-mode="intro"] .timeline,
+body[data-mode="intro"] .hint,
+body[data-mode="intro"] .brand,
+body[data-mode="intro"] .credit,
+body[data-mode="intro"] .time-tag,
+body[data-mode="intro"] .cam-btn { opacity: 0 !important; pointer-events: none !important; }
+
+/* 이름 입력 패널 */
+.intro-panel {
+  position: fixed;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 48px);
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  opacity: 1;
+  transition: opacity .4s;
+}
+body:not([data-mode="intro"]) .intro-panel { opacity: 0; pointer-events: none; }
+
+.intro-label {
+  margin: 0;
+  font-family: var(--pixel);
+  font-size: 11px;
+  letter-spacing: .1em;
+  color: var(--ink);
+  opacity: .65;
+}
+
+.intro-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.intro-input {
+  width: min(220px, 52vw);
+  padding: 9px 14px;
+  font: 18px var(--pixel);
+  color: var(--ink);
+  background: rgba(255,250,243,.82);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  outline: none;
+  text-transform: uppercase;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.intro-input::placeholder { opacity: .35; }
+.intro-input:focus { border-color: var(--bubblegum); box-shadow: 0 0 0 3px rgba(255,143,199,.3); }
+
+.intro-submit {
+  padding: 9px 18px;
+  font: 16px var(--pixel);
+  color: var(--paper);
+  background: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .15s, color .15s;
+}
+.intro-submit:hover { background: var(--bubblegum); border-color: var(--bubblegum); }
+.intro-submit:focus-visible { outline: 3px solid var(--lemon); outline-offset: 3px; }
+
+.intro-error {
+  margin: 0;
+  font-family: var(--pixel);
+  font-size: 11px;
+  color: var(--rec);
+}
+
+/* 캐리어 검사 힌트 */
+.check-hint {
+  position: fixed;
+  transform: translate(-50%, 230%);
+  margin: 0;
+  padding: 6px 14px;
+  font-family: var(--pixel);
+  font-size: 18px;
+  color: var(--paper);
+  background: rgba(42,31,74,.72);
+  border: 1.5px solid rgba(255,255,255,.5);
+  border-radius: 6px;
+  pointer-events: none;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity .3s;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+.check-hint--visible {
+  animation: blink 1.1s ease-in-out infinite;
+  opacity: 1;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: .35; }
+}
+
+@media (max-width: 480px) {
+  .intro-input { font-size: 15px; }
+  .intro-submit { font-size: 13px; padding: 9px 12px; }
+}
+
+@keyframes attendant-float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}

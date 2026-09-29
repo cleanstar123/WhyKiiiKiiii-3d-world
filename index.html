@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>WhyKiiiKiii TOUR 3D World (비공식 팬메이드)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Silkscreen&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+<body data-mode="hub">
+  <canvas id="world" aria-label="캠코더들이 떠다니는 3D 공간"></canvas>
+
+  <header class="brand">
+    <p class="brand-name">WhyKiiiKiii TOUR</p>
+    <p class="brand-sub">WELCOME TO OUR LITTLE PARADISE</p>
+  </header>
+  <p class="credit">MADE BY LUPYLAON</p>
+
+  <nav class="timeline" aria-label="시간대 고르기">
+    <ol id="timeline-list"></ol>
+  </nav>
+  <p class="hint" id="hint">** Touch the screen, and slip into another time. **</p>
+
+  <!-- 인트로: 이름 입력 패널 -->
+  <section class="intro-panel" id="intro-panel" aria-label="탑승 이름 입력">
+    <p class="intro-label">PASSENGER NAME</p>
+    <div class="intro-input-row">
+      <input
+        id="intro-name"
+        class="intro-input"
+        type="text"
+        maxlength="12"
+        placeholder="ENGLISH ONLY"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="characters"
+        spellcheck="false"
+        inputmode="text"
+        aria-label="탑승자 이름 (영문 최대 12자)"
+      >
+      <button id="intro-submit" class="intro-submit" type="button" aria-label="티켓 발권">✈ GO</button>
+    </div>
+    <p class="intro-error" id="intro-error" hidden>영문 이름을 입력해주세요 (A-Z)</p>
+  </section>
+
+  <!-- 인트로: 캐리어 검사 힌트 -->
+  <p class="check-hint" id="check-hint" hidden aria-live="polite">Please complete entry and customs inspection</p>
+
+  <!-- 장면 안에 들어갔을 때 보이는 캠코더 OSD -->
+  <section class="osd" id="osd" hidden aria-live="polite">
+    <span class="osd-corner tl"></span><span class="osd-corner tr"></span>
+    <span class="osd-corner bl"></span><span class="osd-corner br"></span>
+    <p class="osd-play">▶ PLAY</p>
+    <p class="osd-battery" aria-hidden="true"><i></i><i></i><i></i></p>
+    <p class="osd-title" id="osd-title"></p>
+    <p class="osd-time" id="osd-time"></p>
+    <button type="button" class="osd-back" id="osd-back">허브로 돌아가기 (Esc)</button>
+  </section>
+
+  <div class="notice" id="notice" hidden></div>
+
+  <script>
+    // file:// 로 열면 ES 모듈이 막혀서 검은 화면만 나온다. 원인을 바로 알려준다.
+    if (location.protocol === 'file:') {
+      const n = document.getElementById('notice');
+      n.hidden = false;
+      n.textContent = '파일을 직접 열면 동작하지 않아요. IntelliJ 내장 서버나 npm run dev 로 띄운 주소(http://localhost...)로 열어주세요.';
+    }
+  </script>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
