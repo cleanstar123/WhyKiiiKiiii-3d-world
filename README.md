@@ -1,8 +1,5 @@
 # WhyKiiiKiii TOUR 3D World (프로토타입)
 
-키키(KiiiKiii) EP [WhyKiiiKiii] 컨셉에서 영감을 받은 비공식 팬메이드, 비영리 three.js 프로젝트.
-멤버 모습, 앨범 커버, 공식 로고, 뮤비 장면, 음원은 포함하지 않는다.
-
 ## 실행
 ```
 npm install     # 자동완성용 타입과 로컬 서버만 설치 (three.js 자체는 CDN에서 로드)
